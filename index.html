@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>NAM HỎI YIP ĐÁP</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+overflow:hidden;
+font-family:sans-serif;
+animation:bg 6s infinite alternate;
+}
+@keyframes bg{
+0%{background:#ff758c;}
+50%{background:#ff7eb3;}
+100%{background:#ffb199;}
+}
+
+h1{font-size:60px;color:white;}
+h2{font-size:55px;color:white;}
+
+button{
+padding:20px 40px;
+font-size:26px;
+border-radius:30px;
+border:none;
+margin:10px;
+cursor:pointer;
+}
+
+#yes{background:#ff3d6d;color:white;}
+#no{background:black;color:white;}
+
+.hidden{display:none;}
+
+/* 🎶 */
+#musicBox{
+position:fixed;
+top:10px;
+left:10px;
+font-size:30px;
+cursor:pointer;
+animation:spin 3s linear infinite;
+}
+@keyframes spin{
+from{transform:rotate(0);}
+to{transform:rotate(360deg);}
+}
+
+/* 🐶 */
+#dog{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0);
+width:300px;
+z-index:9999;
+transition:0.2s;
+}
+
+/* meme */
+.meme{
+position:absolute;
+font-size:30px;
+animation:spin 3s linear infinite;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" loop>
+<source src="https://www.myinstants.com/media/sounds/tiktok-music.mp3">
+</audio>
+
+<div id="musicBox" onclick="toggleMusic()">🎶</div>
+
+<img id="dog" src="https://i.imgur.com/6o5VQwR.png">
+
+<div id="home">
+<h1>💖 NAM HỎI YIP ĐÁP 💖</h1>
+<button onclick="start()">lẹt gâu 🚀</button>
+</div>
+
+<div id="quiz" class="hidden">
+<h2 id="qtext">Bạn thấy Nam cute không? 😏</h2>
+<button id="yes" onclick="yesClick()">Có 💕</button>
+<button id="no" onclick="noClick()">Không 💀</button>
+</div>
+
+<script>
+let step=0;
+let musicPlaying=false;
+let pigAlive=false;
+
+let trollSound=new Audio("https://www.myinstants.com/media/sounds/vine-boom.mp3");
+let winSound=new Audio("https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3");
+let scareSound=new Audio("https://www.myinstants.com/media/sounds/scream.mp3");
+
+function start(){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("quiz").classList.remove("hidden");
+document.getElementById("bgm").play();
+musicPlaying=true;
+}
+
+function toggleMusic(){
+let a=document.getElementById("bgm");
+if(!musicPlaying){a.play();musicPlaying=true;}
+else{a.pause();musicPlaying=false;}
+}
+
+function yesClick(){
+
+// 🔥 ẩn câu hỏi
+document.getElementById("quiz").style.display="none";
+
+winSound.play();
+
+// 💥 meme + confetti
+for(let i=0;i<50;i++){
+let m=document.createElement("div");
+m.className="meme";
+m.innerHTML=["🎉","😂","🤡","💀","🔥","💖"][Math.floor(Math.random()*6)];
+m.style.left=Math.random()*100+"vw";
+m.style.top=Math.random()*100+"vh";
+document.body.appendChild(m);
+}
+
+// 🐷 nếu heo chết thì hồi sinh + nhảy
+if(!pigAlive){
+let pig=document.createElement("div");
+pig.innerHTML="🐷";
+pig.style.position="fixed";
+pig.style.fontSize="60px";
+document.body.appendChild(pig);
+
+setInterval(()=>{
+pig.style.left=Math.random()*90+"%";
+pig.style.top=Math.random()*90+"%";
+},200);
+}
+
+// text
+let msg=document.createElement("h1");
+msg.innerText="Nam cute: vk anh bá vcl !!! 😎🔥💖";
+document.body.appendChild(msg);
+}
+
+function noClick(){
+step++;
+
+// 👉 lần 1 bình thường
+if(step===1){
+document.getElementById("qtext").innerText="Bạn có chắc chắn không? 🤨";
+return;
+}
+
+trollSound.play();
+
+// 🐶 jumpscare
+let dog=document.getElementById("dog");
+dog.style.transform="translate(-50%,-50%) scale(1.3)";
+scareSound.play();
+setTimeout(()=>{dog.style.transform="translate(-50%,-50%) scale(0)";},500);
+
+// 🐷 tạo heo
+let pig=document.createElement("div");
+pig.innerHTML="🐷";
+pig.style.position="fixed";
+pig.style.fontSize="70px";
+pig.style.cursor="pointer";
+document.body.appendChild(pig);
+
+pigAlive=true;
+
+// chạy loạn
+let move=setInterval(()=>{
+pig.style.left=Math.random()*90+"%";
+pig.style.top=Math.random()*90+"%";
+},200);
+
+// bấm trúng heo
+pig.onclick=function(){
+clearInterval(move);
+pig.innerHTML="💀";
+pigAlive=false;
+
+// ẩn nút không
+document.getElementById("no").style.display="none";
+
+// thông báo
+let msg=document.createElement("div");
+msg.innerHTML="Sự cứng đầu của bạn đã giết chết nó 😭<br>Hãy ấn Có để hồi sinh!";
+msg.style.position="fixed";
+msg.style.top="70%";
+msg.style.left="50%";
+msg.style.transform="translateX(-50%)";
+msg.style.color="white";
+msg.style.fontSize="25px";
+document.body.appendChild(msg);
+};
+}
+</script>
+
+</body>
+</html>
